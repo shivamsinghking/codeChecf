@@ -1,6 +1,8 @@
 import java.io.*;
 import java.util.*;
 
+import javax.swing.text.Segment;
+
 public class Main
 {
     static PrintWriter out = new PrintWriter((System.out));
@@ -19,7 +21,7 @@ public class Main
 
     public static void solve()
     {
-      
+
     }
 
     public static long leftShift(long a){
@@ -222,6 +224,66 @@ public class Main
 
         void print() {
             out.println(Arrays.toString(arr));
+        }
+    }
+
+    static class SegmentTree{
+        int[] arr = new int[4*100000];
+        int[] givenArr;
+        // HINT: This can be updated with ques.
+        int build(int index, int l, int r){
+            if(l == r){
+                return arr[index] = givenArr[l];
+            }
+            int mid = (l+r)/2;
+           return arr[index] = build(2*index+1, l, mid) + build(2*index+2, mid+1, r);
+        }
+        SegmentTree(int[] nums) {
+            givenArr = nums;
+            build(0, 0, nums.length - 1);
+        }
+
+        // HINT: This can be updated with ques.
+        void update(int index, int l, int r, int diff, int i) {
+            if(i>=arr.length){return ;}
+            if(index>=l && index<=r){
+                arr[i] = arr[i]+diff;
+            }
+            if(index<l || index>r){
+                return;
+            }
+            int mid = (l+r)/2;
+            update(index,l,mid, diff, 2*i+1);
+            update(index,mid+1, r, diff, 2*i+2);
+            return;
+        }
+
+        void update(int index, int val){
+            int diff = val - givenArr[index];
+            givenArr[index] = val;
+            update(index, 0, givenArr.length-1, diff, 0);
+        }
+
+        int query(int left, int right, int l, int r, int i) {
+            // not overlapping
+            if (r < left || l > right) {
+                return 0;
+            }
+
+            // total - overlapping
+            if (l >= left && r <= right) {
+                return arr[i];
+            }
+
+            // partial overlapping
+            int mid = (l + r) / 2;
+            int le = query(left, right, l, mid, 2 * i + 1);
+            int ri = query(left, right, mid + 1, r, 2 * i + 2);
+            return le + ri;
+        }
+        // HINT: for max sum, can be changed according to ques.
+        int query(int l , int r){
+            return query(l, r, 0, givenArr.length-1, 0);
         }
     }
 }
