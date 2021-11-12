@@ -1,4 +1,5 @@
 import java.io.*;
+import java.lang.reflect.Array;
 import java.util.*;
 
 import javax.swing.text.Segment;
@@ -19,71 +20,56 @@ public class Main
       out.close();
     }
 
-    static int minOperationZero(String s){
-      // making all 0
-      int len = s.length();
-      String ss = "";
-      int cnt = 0;
-      for(int i = 0; i < len; i++){
-        if(s.charAt(i) == '1'){
-          int j = i+1;
-          for( ; j < len; j++ ){
-            if(s.charAt(j) != '1'){
-              break;
-            }
-          }
-          int prevI = i;
-          i = j - 1;
-          ss += '1';
-          if(prevI != i){
-            cnt++;
-          }
-        }else ss += '0';
-      }
-
-      for(int i = 0; i < ss.length(); i++){
-        if(ss.charAt(i)  == '1') cnt++;
-      }
-      return cnt;
-    }
-
-    static int minOperationOne(String s){
-      // making all 1
-      int len = s.length();
-      String ss = "";
-      int cnt = 0;
-      for(int i = 0; i < len; i++){
-        if(s.charAt(i) == '0'){
-          int j = i+1;
-          for( ; j < len; j++ ){
-            if(s.charAt(j) != '0'){
-              break;
-            }
-          }
-          int prevI = i;
-          i = j - 1;
-          ss += '0';
-          if(prevI != i){
-            cnt++;
-          }
-        }else ss += '1';
-      }
-
-      for(int i = 0; i < ss.length(); i++){
-        if(ss.charAt(i)  == '0') cnt++;
-      }
-      return cnt;
-    }
-
     public static void solve()
     {
+      int n = sc.nextInt();
+      int m = sc.nextInt();
+      List<Integer>[] ll = new List[n+1];
 
-      String s = sc.nextLine();
+      for(int i = 0; i <= n; i++){
+        List<Integer> l = new ArrayList<>();
+         ll[i] = l;
+      }
 
-      String s1 = s.substring(0, s.length());
-      String s2 = s.substring(0, s.length());
-      int min = Math.min(minOperationOne(s1), minOperationZero(s2));
-      out.println(min);
+      // connecting n - 1 nodes.
+      // n = 4, m = 6
+      int[][] ans = new int[m+1][2];
+      for(int i = 1; i < n; i++){
+        List<Integer> nodes = ll[i];
+        nodes.add(i+1);
+        ans[m][0] = i;
+        ans[m][1] = i+1;
+        m--;
+      }
+
+      // out.println(n);
+      for(int i = n; i >= 1; i--){
+        for(int j = i+2; j <= n; j++){
+          if(m > 0){
+            ans[m][0] = j;
+            ans[m][1] = i;
+            m--;
+          }else break;
+        }
+      }
+
+      // // only thing left is to connect with 1st nodes if left
+      // if(m > 0){
+      //   for(int i = n; i > 1; i-- ){
+      //     if(m > 0){
+      //       List<Integer> node1 = ll[i];
+      //       node1.add(1);
+      //       ll[i] = node1;
+      //       ans[m][0] = i;
+      //       ans[m][1] = 1;
+      //       m--;
+      //     }else break;
+      //   }
+      // }
+
+      for(int i = 1; i < ans.length; i++){
+        out.println(ans[i][0] + " " + ans[i][1]);
+      }
     }
 
     public static long leftShift(long a){

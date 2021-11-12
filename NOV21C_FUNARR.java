@@ -19,73 +19,59 @@ public class Main
       out.close();
     }
 
-    static int minOperationZero(String s){
-      // making all 0
-      int len = s.length();
-      String ss = "";
-      int cnt = 0;
-      for(int i = 0; i < len; i++){
-        if(s.charAt(i) == '1'){
-          int j = i+1;
-          for( ; j < len; j++ ){
-            if(s.charAt(j) != '1'){
-              break;
-            }
-          }
-          int prevI = i;
-          i = j - 1;
-          ss += '1';
-          if(prevI != i){
-            cnt++;
-          }
-        }else ss += '0';
-      }
-
-      for(int i = 0; i < ss.length(); i++){
-        if(ss.charAt(i)  == '1') cnt++;
-      }
-      return cnt;
-    }
-
-    static int minOperationOne(String s){
-      // making all 1
-      int len = s.length();
-      String ss = "";
-      int cnt = 0;
-      for(int i = 0; i < len; i++){
-        if(s.charAt(i) == '0'){
-          int j = i+1;
-          for( ; j < len; j++ ){
-            if(s.charAt(j) != '0'){
-              break;
-            }
-          }
-          int prevI = i;
-          i = j - 1;
-          ss += '0';
-          if(prevI != i){
-            cnt++;
-          }
-        }else ss += '1';
-      }
-
-      for(int i = 0; i < ss.length(); i++){
-        if(ss.charAt(i)  == '0') cnt++;
-      }
-      return cnt;
-    }
-
     public static void solve()
     {
+     int n = sc.nextInt();
+     int m = sc.nextInt();
 
-      String s = sc.nextLine();
+     int[] b = new int[n];
+     int[] z = new int[m];
+     for(int i = 0; i < n; i++){
+       b[i] = sc.nextInt();
+     }
 
-      String s1 = s.substring(0, s.length());
-      String s2 = s.substring(0, s.length());
-      int min = Math.min(minOperationOne(s1), minOperationZero(s2));
-      out.println(min);
+     for(int i = 0; i < m; i++){
+       z[i] = sc.nextInt();
+     }
+
+
+     for(int i = 0; i < m; i++){
+      int val = b[0];
+      int index = 1;
+      for(int j = i; j < m; j++){
+          if(index >= n){
+            out.println("YES");
+            return;
+          }
+          val += z[j];
+          // out.println(val + " - " + b[index]);
+          if(val == b[index]){
+              index++;
+          }else if(val > b[index]) break;
+      }
+      if(index >= n){
+        out.println("YES");
+        return;
+      }
+     }
+     out.println("NO");
+     return;
     }
 
+    static boolean isValid(int sum, int[] prefixSum){
+       HashMap<Integer,Integer> map = new HashMap<>();
+       map.put(0, 1);
+
+       for(int i = 0; i < prefixSum.length; i++){
+         if(map.containsKey(prefixSum[i] - sum)){
+           return true;
+         }else{
+           map.put(prefixSum[i], 1);
+         }
+       }
+       return false;
+
+    }
     public static long leftShift(long a){
         return (long)Math.pow(2, a);
     }

@@ -28,11 +28,16 @@ public class Main
 
       // int total = ;
       // out.println(total);
-      if(x%2 == 0 && y%2 == 0){
-        out.println("YES");
+      if(x% 2 == 0){
+          if(x == 0 && (y%2 != 0)){
+              out.println("NO");
+          }else{
+              out.println("YES");
+          }
       }else{
-        out.println("NO");
+          out.println("NO");
       }
+      return;
     }
 
     public static long leftShift(long a){

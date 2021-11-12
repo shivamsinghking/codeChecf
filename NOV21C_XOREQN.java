@@ -19,73 +19,78 @@ public class Main
       out.close();
     }
 
-    static int minOperationZero(String s){
-      // making all 0
-      int len = s.length();
-      String ss = "";
-      int cnt = 0;
-      for(int i = 0; i < len; i++){
-        if(s.charAt(i) == '1'){
-          int j = i+1;
-          for( ; j < len; j++ ){
-            if(s.charAt(j) != '1'){
-              break;
-            }
-          }
-          int prevI = i;
-          i = j - 1;
-          ss += '1';
-          if(prevI != i){
-            cnt++;
-          }
-        }else ss += '0';
-      }
-
-      for(int i = 0; i < ss.length(); i++){
-        if(ss.charAt(i)  == '1') cnt++;
-      }
-      return cnt;
-    }
-
-    static int minOperationOne(String s){
-      // making all 1
-      int len = s.length();
-      String ss = "";
-      int cnt = 0;
-      for(int i = 0; i < len; i++){
-        if(s.charAt(i) == '0'){
-          int j = i+1;
-          for( ; j < len; j++ ){
-            if(s.charAt(j) != '0'){
-              break;
-            }
-          }
-          int prevI = i;
-          i = j - 1;
-          ss += '0';
-          if(prevI != i){
-            cnt++;
-          }
-        }else ss += '1';
-      }
-
-      for(int i = 0; i < ss.length(); i++){
-        if(ss.charAt(i)  == '0') cnt++;
-      }
-      return cnt;
-    }
-
     public static void solve()
     {
+      int n = sc.nextInt();
+      long[] arr = new long[n];
+      for(int i = 0; i < n; i++){
+        arr[i] = sc.nextLong();
+      }
 
-      String s = sc.nextLine();
+      // int[] bits = new int[32];
+      // for(int i = 0; i < n; i++){
+      //   calculateBit(arr[i], bits);
+      // }
 
-      String s1 = s.substring(0, s.length());
-      String s2 = s.substring(0, s.length());
-      int min = Math.min(minOperationOne(s1), minOperationZero(s2));
-      out.println(min);
+      int index = 0;
+      long x = 0;
+      long x1 = 0L;
+      boolean add = true;
+      while(index < 64){
+        if(add){
+          for(int i = 0; i < n; i++){
+            // out.println(" xx " + x1);
+            arr[i] += x1;
+          }
+        }
+       
+
+        long newXor = 0L;
+        for(int i = 0; i < n; i++){
+          newXor = newXor^arr[i];
+        }
+
+        if(newXor == 0){
+           out.println(x);
+           return;
+        }
+        String s = Long.toBinaryString(newXor);
+        // out.println("ss " + s);
+        char c;
+        if(index >= s.length()){
+          c = '0';
+        }else{
+          c = s.charAt(s.length() - 1 - index);
+        }
+
+        // out.println(s + " and" + c + " - " + newXor);
+        if(c == '1'){
+          // odd no. of 1s and even no. of 0s
+          // out.println(" -- " + (1 << index));
+          x += leftShift(index);
+          x1 = leftShift(index);
+          add = true;
+        }else add = false;
+        index++;
+      }
+
+      out.println(-1);
+      return;
+
     }
 
+    static void calculateBit(int val, int[] bit){
+
+      int index = 0;
+      while(val > 0){
+        if((val & 1) == 1){
+          bit[index]++;
+        }
+        index++;
+        val = val >> 1;
+      }
+      return;
+    }
     public static long leftShift(long a){
         return (long)Math.pow(2, a);
     }
