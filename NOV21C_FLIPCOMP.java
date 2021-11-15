@@ -1,5 +1,7 @@
-import java.io.*;
+
 import java.util.*;
+import java.lang.*;
+import java.io.*;
 
 import javax.swing.text.Segment;
 
@@ -21,56 +23,84 @@ public class Main
 
     static int minOperationZero(String s){
       // making all 0
-      int len = s.length();
-      String ss = "";
-      int cnt = 0;
+
+      // IMP - case => 101 no need to convert 0 -> 1, no. of operation = 2,
+      // 11011 => if we don't convert 0 -> 1, no. of operation = 2(left of zero) + 2(right to 0) = 4 to convert all to zero
+      // while converting 0 ->1 no. operation to make all zero = 3 to convert all zero
+
+      // NOTE - same goes for 010, 00100
+
+      int len = s.length(); 
+      char[] c = s.toCharArray(); 
+      int cnt = 0;  
+      for(int i = 1; i < len-1; i++){
+          if(c[i] == '0' && c[i-1] == '1' && c[i+1]== '1' && ((i - 2 > 0 && c[i-2] == '1') || (i+ 2 < len && c[i+2] == '1') )){
+             c[i] = '1';
+             cnt++;
+          }
+      }
+    //   out.println("ss ->0 " + Arrays.toString(c));
+      StringBuffer ss = new StringBuffer();
+   
       for(int i = 0; i < len; i++){
-        if(s.charAt(i) == '1'){
+        if(c[i] == '1'){
           int j = i+1;
           for( ; j < len; j++ ){
-            if(s.charAt(j) != '1'){
+            if(c[j] != '1'){
               break;
             }
           }
           int prevI = i;
           i = j - 1;
-          ss += '1';
+          ss.append("1");
           if(prevI != i){
             cnt++;
           }
-        }else ss += '0';
+        }else ss.append("0");
       }
 
-      for(int i = 0; i < ss.length(); i++){
-        if(ss.charAt(i)  == '1') cnt++;
+      String newS = ss.toString();
+      for(int i = 0; i < newS.length(); i++){
+        if(newS.charAt(i)  == '1') cnt++;
       }
       return cnt;
     }
 
     static int minOperationOne(String s){
       // making all 1
-      int len = s.length();
-      String ss = "";
-      int cnt = 0;
+
+      int len = s.length(); 
+      char[] c = s.toCharArray(); 
+      int cnt = 0;  
+      for(int i = 1; i < len-1; i++){
+          if(c[i] == '1' && c[i-1] == '0' && c[i+1]== '0' && ((i - 2 > 0 && c[i-2] == '0') || (i+ 2 < len && c[i+2] == '0') )){
+             c[i] = '0';
+             cnt++;
+          }
+      }
+    //   out.println("ss ->1 " + Arrays.toString(c));
+      StringBuffer ss = new StringBuffer();
+   
       for(int i = 0; i < len; i++){
-        if(s.charAt(i) == '0'){
+        if(c[i] == '0'){
           int j = i+1;
           for( ; j < len; j++ ){
-            if(s.charAt(j) != '0'){
+            if(c[j] != '0'){
               break;
             }
           }
           int prevI = i;
           i = j - 1;
-          ss += '0';
+          ss.append("0");
           if(prevI != i){
             cnt++;
           }
-        }else ss += '1';
+        }else ss.append("1");
       }
 
-      for(int i = 0; i < ss.length(); i++){
-        if(ss.charAt(i)  == '0') cnt++;
+      String newS = ss.toString();
+      for(int i = 0; i < newS.length(); i++){
+        if(newS.charAt(i)  == '0') cnt++;
       }
       return cnt;
     }
