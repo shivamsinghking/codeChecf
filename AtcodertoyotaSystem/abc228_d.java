@@ -3,6 +3,7 @@ import java.util.*;
 
 import javax.swing.text.Segment;
 
+// Binary search + TreeSet
 public class Main
 {
     static PrintWriter out = new PrintWriter((System.out));
@@ -10,18 +11,45 @@ public class Main
 
     public static void main(String[] args)
     {
-      int t = 1;
-      t = sc.nextInt();
-      while (t-- > 0)
-      {
-          solve();
-      }
+      // int t = 1;
+      // t = sc.nextInt();
+      solve();
       out.close();
     }
 
     public static void solve()
     {
+      int N = 1048576;
+       int n = sc.nextInt();
+       long[][] t = new long[n][2];
+       for(int i = 0; i < n; i++){
+         t[i][0] = sc.nextLong();
+         t[i][1] = sc.nextLong();
+       }
+       TreeSet<Integer> set = new TreeSet<>();
 
+       for(int i = 0; i < N; i++){
+         set.add(i);
+       }
+       long[] arr = new long[N+1];
+       Arrays.fill(arr, -1);
+       for(int i = 0; i < n; i++){
+         long tt = t[i][0];
+         long x = t[i][1];
+         if(tt == 1){
+          int h = (int)(x%N);
+          Integer index = set.ceiling(h);
+          if(index == null){
+            index = set.ceiling(0);
+            // no value found
+          }
+          arr[index] = x;
+          set.remove(index);
+         }else{
+           out.println(arr[(int)(x%N)]);
+         }
+       }
+       return;
     }
 
     public static long leftShift(long a){
@@ -286,39 +314,4 @@ public class Main
             return query(l, r, 0, givenArr.length-1, 0);
         }
     }
-
-    class DSU{
-        int[] parent, size;
-        
-       DSU(int n){
-           parent = new int[n];
-           size = new int[n];
-           for(int i = 0;i < n; i++){
-               parent[i] = i;
-               size[i] = 1;
-           }
-       }
-       
-       int findParent(int i){
-           if(parent[i] == i){
-               return i;
-           }
-           return parent[i] = findParent(parent[i]);
-       }
-       
-       void Union(int u,int v){
-           int parent_u = findParent(u);
-           int parent_v  = findParent(v);
-           if(parent_u == parent_v) return;
-           
-           // small attached to big, since we want to reduce overall size
-           if(size[parent_u] < size[parent_v]){
-               parent[parent_u] = parent_v;
-               size[parent_v]++;
-           }else{
-               parent[parent_v] = parent_u;
-               size[parent_u]++;
-           }
-       }
-   }
 }

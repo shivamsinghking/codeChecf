@@ -11,17 +11,32 @@ public class Main
     public static void main(String[] args)
     {
       int t = 1;
-      t = sc.nextInt();
-      while (t-- > 0)
-      {
-          solve();
-      }
+      solve();
       out.close();
     }
 
     public static void solve()
     {
 
+      int n = sc.nextInt();
+      int x = sc.nextInt();
+      int[] arr = new int[n+1];
+      for(int i = 1; i <= n; i++){
+        arr[i] = sc.nextInt();
+      }
+
+      boolean[] visited = new boolean[n+1];
+
+
+      while(!visited[x]){
+        visited[x] = true;
+        x = arr[x];
+      }
+      int cnt = 0;
+      for(int i = 1; i <= n; i++){
+          cnt += visited[i] == true ? 1 : 0;
+      }
+      out.println(cnt);
     }
 
     public static long leftShift(long a){
@@ -286,39 +301,4 @@ public class Main
             return query(l, r, 0, givenArr.length-1, 0);
         }
     }
-
-    class DSU{
-        int[] parent, size;
-        
-       DSU(int n){
-           parent = new int[n];
-           size = new int[n];
-           for(int i = 0;i < n; i++){
-               parent[i] = i;
-               size[i] = 1;
-           }
-       }
-       
-       int findParent(int i){
-           if(parent[i] == i){
-               return i;
-           }
-           return parent[i] = findParent(parent[i]);
-       }
-       
-       void Union(int u,int v){
-           int parent_u = findParent(u);
-           int parent_v  = findParent(v);
-           if(parent_u == parent_v) return;
-           
-           // small attached to big, since we want to reduce overall size
-           if(size[parent_u] < size[parent_v]){
-               parent[parent_u] = parent_v;
-               size[parent_v]++;
-           }else{
-               parent[parent_v] = parent_u;
-               size[parent_u]++;
-           }
-       }
-   }
 }

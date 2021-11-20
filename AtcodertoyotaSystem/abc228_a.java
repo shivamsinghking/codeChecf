@@ -11,16 +11,29 @@ public class Main
     public static void main(String[] args)
     {
       int t = 1;
-      t = sc.nextInt();
-      while (t-- > 0)
-      {
-          solve();
-      }
+      solve();
       out.close();
     }
 
     public static void solve()
     {
+
+      int s = sc.nextInt();
+      int e = sc.nextInt();
+      int x = sc.nextInt();
+
+
+      if(x ==  e){
+        out.println("No");
+      }else{
+        if(e > s && x >= s && x < e){
+          out.println("Yes");
+        }else if(s > e && (x < e || x >= s)){
+          out.println("Yes");
+        }else{
+          out.println("No");
+        }
+      }
 
     }
 
@@ -286,39 +299,4 @@ public class Main
             return query(l, r, 0, givenArr.length-1, 0);
         }
     }
-
-    class DSU{
-        int[] parent, size;
-        
-       DSU(int n){
-           parent = new int[n];
-           size = new int[n];
-           for(int i = 0;i < n; i++){
-               parent[i] = i;
-               size[i] = 1;
-           }
-       }
-       
-       int findParent(int i){
-           if(parent[i] == i){
-               return i;
-           }
-           return parent[i] = findParent(parent[i]);
-       }
-       
-       void Union(int u,int v){
-           int parent_u = findParent(u);
-           int parent_v  = findParent(v);
-           if(parent_u == parent_v) return;
-           
-           // small attached to big, since we want to reduce overall size
-           if(size[parent_u] < size[parent_v]){
-               parent[parent_u] = parent_v;
-               size[parent_v]++;
-           }else{
-               parent[parent_v] = parent_u;
-               size[parent_u]++;
-           }
-       }
-   }
 }

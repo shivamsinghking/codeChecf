@@ -10,18 +10,64 @@ public class Main
 
     public static void main(String[] args)
     {
-      int t = 1;
-      t = sc.nextInt();
-      while (t-- > 0)
-      {
-          solve();
-      }
+      solve();
       out.close();
     }
 
     public static void solve()
     {
+         int n = sc.nextInt();
+         int k = sc.nextInt();
 
+         int[][] p = new int[n][3];
+
+         for(int i = 0 ; i < n; i++){
+           for(int j = 0 ; j < 3; j++){
+             p[i][j] = sc.nextInt();
+           }
+         }
+
+         int[][] marks = new int[n][2];
+         for(int i = 0; i < n; i++){
+           int sum = 0;
+           for(int j = 0; j < 3; j++){
+             sum += p[i][j];
+           }
+           marks[i][0] = sum;
+           marks[i][1] = i;
+         }
+
+         Arrays.sort(marks, new Comparator<int[]>(){
+           public int compare(int[]a, int[]b){
+             return b[0] - a[0];
+           }
+         });
+
+         boolean[] st = new boolean[n];
+         k--;
+         int mark = marks[k][0];
+         for(int i = 0; i < n; i++){
+          int student = marks[i][1]; // i
+          int m = marks[i][0]; //mark
+            if(i <= k){
+              st[student] = true;
+            }else{
+              if(m+300 >= mark){
+                st[student] = true;
+              }else{
+                st[student] = false;
+              }
+            }
+         }
+
+         for(boolean i: st){
+           if(i){
+             out.println("Yes");
+           }else{
+             out.println("No");
+           }
+         }
+         return;
     }
 
     public static long leftShift(long a){
@@ -286,39 +332,4 @@ public class Main
             return query(l, r, 0, givenArr.length-1, 0);
         }
     }
-
-    class DSU{
-        int[] parent, size;
-        
-       DSU(int n){
-           parent = new int[n];
-           size = new int[n];
-           for(int i = 0;i < n; i++){
-               parent[i] = i;
-               size[i] = 1;
-           }
-       }
-       
-       int findParent(int i){
-           if(parent[i] == i){
-               return i;
-           }
-           return parent[i] = findParent(parent[i]);
-       }
-       
-       void Union(int u,int v){
-           int parent_u = findParent(u);
-           int parent_v  = findParent(v);
-           if(parent_u == parent_v) return;
-           
-           // small attached to big, since we want to reduce overall size
-           if(size[parent_u] < size[parent_v]){
-               parent[parent_u] = parent_v;
-               size[parent_v]++;
-           }else{
-               parent[parent_v] = parent_u;
-               size[parent_u]++;
-           }
-       }
-   }
 }

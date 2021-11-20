@@ -11,24 +11,79 @@ public class Main
     public static void main(String[] args)
     {
       int t = 1;
-      t = sc.nextInt();
-      while (t-- > 0)
-      {
-          solve();
-      }
+      solve();
       out.close();
     }
 
     public static void solve()
     {
+      int n = sc.nextInt();
+      int q = sc.nextInt();
 
+      List<Integer> ll = new ArrayList<>();
+      for(int i = 0 ; i < n; i++){
+        int a = sc.nextInt();
+        ll.add(a);
+      }
+
+      // long cnt = 0;
+      for(int i = 0 ; i < q; i++){
+        int l = sc.nextInt();
+        int r = sc.nextInt();
+        int x = sc.nextInt();
+        
+
+      
+        l--;
+        r--;
+        int rr = r;
+        int prevL = l;
+        int index = -1000;
+        if(l == r){
+          if(ll.get(l) >= x){
+            out.println(1);
+          }else{
+            out.println(0);
+          }
+          continue;
+        }
+        while(l < r){
+          int mid = (l+r)/2;
+          // out.println(" mid " + mid + " " + ll.get(mid));
+          if(ll.get(mid) <= x){
+            if(ll.get(mid) == x){
+              index = mid-1;
+              break;
+            }
+            if(ll.get(mid+1) >= x){
+              index = mid;
+              break;
+            }
+            l = mid+1;
+          }else{
+             r = mid;
+          }
+        }
+        if(index == -1000){
+          if(ll.get(prevL) >= x){
+            out.println(rr - prevL + 1);
+          }else if(ll.get(rr) < x ){
+            out.println(0);
+          }
+          continue;
+        }
+        index++;
+        // out.println(" index " + index + " ");
+        long cnt = (rr - index + 1);
+        out.println(cnt);
+      }
     }
 
     public static long leftShift(long a){
         return (long)Math.pow(2, a);
     }
 
-    public static int lower_bound(ArrayList<Integer> ar, int k)
+    public static int lower_bound(List<Integer> ar, int k)
     {
         int s = 0, e = ar.size();
         while (s != e)
@@ -46,7 +101,7 @@ public class Main
         return Math.abs(s) - 1;
     }
 
-    public static int upper_bound(ArrayList<Integer> ar, int k)
+    public static int upper_bound(List<Integer> ar, int k)
     {
         int s = 0;
         int e = ar.size();
@@ -286,39 +341,4 @@ public class Main
             return query(l, r, 0, givenArr.length-1, 0);
         }
     }
-
-    class DSU{
-        int[] parent, size;
-        
-       DSU(int n){
-           parent = new int[n];
-           size = new int[n];
-           for(int i = 0;i < n; i++){
-               parent[i] = i;
-               size[i] = 1;
-           }
-       }
-       
-       int findParent(int i){
-           if(parent[i] == i){
-               return i;
-           }
-           return parent[i] = findParent(parent[i]);
-       }
-       
-       void Union(int u,int v){
-           int parent_u = findParent(u);
-           int parent_v  = findParent(v);
-           if(parent_u == parent_v) return;
-           
-           // small attached to big, since we want to reduce overall size
-           if(size[parent_u] < size[parent_v]){
-               parent[parent_u] = parent_v;
-               size[parent_v]++;
-           }else{
-               parent[parent_v] = parent_u;
-               size[parent_u]++;
-           }
-       }
-   }
 }

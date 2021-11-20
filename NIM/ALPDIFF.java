@@ -22,6 +22,41 @@ public class Main
     public static void solve()
     {
 
+       String a = sc.nextLine();
+       String b = sc.nextLine();
+
+       int[] arr1 = new int[26];
+       int[] arr2 = new int[26];
+
+       for(char c: a.toCharArray()){
+         arr1[c - 'a']++;
+       }
+
+       for(char c: b.toCharArray()){
+        arr2[c - 'a']++;
+      }
+
+      String S = "abcdefghijklmnopqrstuvwxyz";
+
+      List<Character> ll = new ArrayList<>();
+      for(int i = 0; i < 26; i++){
+        if(arr2[i] > 0){
+             if(arr1[i] > 0){
+
+             }else{
+               ll.add(S.charAt(i));
+             }
+        }
+      }
+
+      if(ll.size() == 0){
+        out.println(-1);
+        return ;
+      }
+      for(char c : ll){
+        out.print(c);
+      }
+      out.println();
     }
 
     public static long leftShift(long a){
@@ -286,39 +321,4 @@ public class Main
             return query(l, r, 0, givenArr.length-1, 0);
         }
     }
-
-    class DSU{
-        int[] parent, size;
-        
-       DSU(int n){
-           parent = new int[n];
-           size = new int[n];
-           for(int i = 0;i < n; i++){
-               parent[i] = i;
-               size[i] = 1;
-           }
-       }
-       
-       int findParent(int i){
-           if(parent[i] == i){
-               return i;
-           }
-           return parent[i] = findParent(parent[i]);
-       }
-       
-       void Union(int u,int v){
-           int parent_u = findParent(u);
-           int parent_v  = findParent(v);
-           if(parent_u == parent_v) return;
-           
-           // small attached to big, since we want to reduce overall size
-           if(size[parent_u] < size[parent_v]){
-               parent[parent_u] = parent_v;
-               size[parent_v]++;
-           }else{
-               parent[parent_v] = parent_u;
-               size[parent_u]++;
-           }
-       }
-   }
 }
