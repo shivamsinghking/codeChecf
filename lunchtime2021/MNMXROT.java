@@ -2,6 +2,7 @@ import java.io.*;
 import java.util.*;
 
 import javax.swing.text.Segment;
+import javax.swing.text.StyledEditorKit.BoldAction;
 
 public class Main
 {
@@ -22,6 +23,61 @@ public class Main
     public static void solve()
     {
 
+      int n = sc.nextInt();
+      long[][] arr = new long[n][2];
+      for(int i = 0; i < n; i++){
+        arr[i][0] = sc.nextLong();
+        arr[i][1]= i; 
+      }
+      String s = sc.nextLine();
+
+      Arrays.sort(arr, new Comparator<long[]>(){
+        public int compare(long[] a, long[] b){
+          return (int)(a[0] - b[0]);
+        }
+      });
+
+      List<Integer> black_indices = new ArrayList<>();
+
+      boolean[] white_indices = new boolean[n];
+      Arrays.fill(white_indices, false);
+
+      for(int i = 0; i < s.length(); i++){
+            if(s.charAt(i) == 'B') black_indices.add(i);
+            else white_indices[i] = true;
+      }
+
+      long ans = Integer.MIN_VALUE;
+      for(int i = n - 1; i > 0; i--){
+        long val = arr[i][0];
+        long actual_index = arr[i][1];
+
+        if(val - arr[0][0] <= ans) break;
+        for(int j = 0; j < i; j++){
+          long val1 = arr[j][0];
+          long index2 = arr[j][1];
+          
+          if(val - val1 <= ans) break;
+          int dis = (int)Math.abs(index2 - actual_index);
+
+          Boolean flag = false;
+          for(int x: black_indices){
+            int forward = (x+dis)%n;
+            int backward = 0;
+            if(x - dis < 0){
+              backward = x - dis + n;
+            }else backward = x - dis;
+
+            if(white_indices[forward] || white_indices[backward]){
+              ans = Math.max(ans, val - val1);
+              flag = true;
+              break;
+            }
+          }
+          if(flag) break;
+        }
+      }
+      out.println(ans);
     }
 
     static ArrayList<Long> prime_factors(long n) {

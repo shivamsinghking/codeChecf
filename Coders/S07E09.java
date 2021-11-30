@@ -21,7 +21,35 @@ public class Main
 
     public static void solve()
     {
+     int n = sc.nextInt();
+     int[] arr = new int[n];
+     for(int i = 0; i < n; i++){
+       arr[i] = sc.nextInt();
+     }
 
+    //  int index = -1;
+     long min = Integer.MAX_VALUE;
+     for(int i = 0; i < n; i++){
+       if(arr[i] < min){
+         min = arr[i];
+       }
+     }
+
+     int cnt = 0;
+     for(int i : arr){
+       if( i == min){
+         cnt++;
+       }
+     }
+
+
+     if(min <= 0){
+       out.println(n - cnt);
+       return;
+     }
+
+
+     out.println(min*((long)n) + (long)(n - cnt));
     }
 
     static ArrayList<Long> prime_factors(long n) {

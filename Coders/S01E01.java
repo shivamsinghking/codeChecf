@@ -22,6 +22,12 @@ public class Main
     public static void solve()
     {
 
+      int n = sc.nextInt();
+      if(n < 21){
+        out.println("NO");
+      }else{
+        out.println("YES");
+      }
     }
 
     static ArrayList<Long> prime_factors(long n) {

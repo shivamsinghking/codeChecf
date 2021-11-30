@@ -21,27 +21,50 @@ public class Main
 
     public static void solve()
     {
-
-    }
-
-    static ArrayList<Long> prime_factors(long n) {
-        ArrayList<Long> ans = new ArrayList<Long>();
-        while (n % 2 == 0) {
-            ans.add(2L);
-            return ans;
-        }
-        for (long i = 3; i <= Math.sqrt(n); i++) {
-            while (n % i == 0) {
-                ans.add(i);
-                return ans;
-            }
-        }
-        if (n > 2){
-            ans.add(n);
-        }
-        return ans;
-    }
     
+      long n = sc.nextLong();
+
+      ArrayList<Long> ll = prime_factors(n);
+      Collections.sort(ll);
+
+      if(ll.size() == 0){
+        out.println(n + 1);
+        return;
+      }
+
+      // out.println(ll);
+      if(ll.get(0) == n){
+       out.println(n+1);
+       return;
+      }
+
+      if(n%2 == 0){
+        out.println(3*(n/2));
+      }else{
+        long val = n/ll.get(0);
+        out.println(val*(ll.get(0)+1));
+      }
+
+    }
+
+    // we only give smallest prime factor
+    static ArrayList<Long> prime_factors(long n) {
+      ArrayList<Long> ans = new ArrayList<Long>();
+      while (n % 2 == 0) {
+          ans.add(2L);
+          return ans;
+      }
+      for (long i = 3; i <= Math.sqrt(n); i++) {
+          while (n % i == 0) {
+              ans.add(i);
+              return ans;
+          }
+      }
+      if (n > 2){
+          ans.add(n);
+      }
+      return ans;
+  }
     public static long leftShift(long a){
         return (long)Math.pow(2, a);
     }

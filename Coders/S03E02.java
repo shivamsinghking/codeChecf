@@ -21,9 +21,84 @@ public class Main
 
     public static void solve()
     {
+        int n = sc.nextInt();
+        int k = sc.nextInt();
+        String s = sc.nextLine();
 
+        int ii = 0;
+        int jj = n - 1;
+        while(ii <= jj && s.charAt(ii) == s.charAt(jj)){
+          ii++;
+          jj--;
+        }
+        boolean same = false;
+        
+        if(jj < ii){
+          same = true;
+        }
+
+        if(k == 0){
+          if(same){
+            out.println(n);
+          }else{
+            out.println(0);
+          }
+          return;
+        }
+
+        if(same){
+          out.println(n);
+          return;
+        }
+
+        long max = Integer.MIN_VALUE;
+        for(int i = 0; i < 26; i++){
+          char c = Character.toUpperCase(getAlpha(i));
+          
+          int j = 0;
+          long sum = 0L;
+
+          int prefixIndex = 0;
+          while(prefixIndex < n && s.charAt(prefixIndex) == c){
+            prefixIndex++;
+          }
+          sum += prefixIndex;
+
+          int suffixIndex = n - 1;
+          while(suffixIndex >= 0 && s.charAt(suffixIndex) == c){
+            suffixIndex--;
+          }
+
+          sum += (n - 1 - suffixIndex);
+
+          List<Integer> ll = new ArrayList<>();
+          for(j = prefixIndex; j <= suffixIndex; j++ ){
+            if(s.charAt(j) == c){
+              int prevIndex = j;
+              while(j <= suffixIndex && s.charAt(j) == c){
+                j++;
+              }
+              ll.add(j - prevIndex);
+            }
+          }
+
+          Collections.sort(ll);
+          int kk = k-1;
+          int index = ll.size() - 1;
+          while(kk > 0 && index >= 0){
+            sum += ll.get(index);
+            index--;
+            kk--;
+          }
+          
+          max = Math.max(sum, max);
+        }
+        out.println(max);
     }
 
+    static Character getAlpha(int i){
+      return (char)(i+97);
+    }
     static ArrayList<Long> prime_factors(long n) {
         ArrayList<Long> ans = new ArrayList<Long>();
         while (n % 2 == 0) {

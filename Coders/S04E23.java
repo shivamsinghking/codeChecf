@@ -19,8 +19,43 @@ public class Main
       out.close();
     }
 
+    // axes == true => x 
+    // axes == false => y 
+    static boolean dp(int index, String s, int p, int q, int x, int y, boolean axes){
+      if(index >= s.length()){
+        if(x == p && y == q) return true;
+        else return false;
+      }
+
+      if(s.charAt(index) == '1'){
+        if(axes){
+          return dp(index+1, s, p, q, (x > p) ? x - 1 : x+1, y, axes);
+        }else{
+          return dp(index+1, s, p, q, x,(y > q ) ? y - 1 : y+1, axes);
+        }
+      }else{
+        if(axes){
+          return dp(index+1, s, p, q, x, (y > q) ? y - 1 : y+1, !axes);
+        }else{
+          return dp(index+1, s, p, q, (x > p) ? x - 1 : x+1, y, !axes);
+        }
+      }
+    }
     public static void solve()
     {
+      int n = sc.nextInt();
+      int p = sc.nextInt();
+      int q = sc.nextInt();
+      String s = sc.nextLine();
+
+      p = Math.abs(p);
+      q = Math.abs(q);
+      boolean ans = dp(0, s, p, q, 0, 0, true) || dp(0, s, p, q, 0, 0, false);
+      if(ans){
+        out.println("YES");
+      }else{
+        out.println("NO");
+      }
 
     }
 

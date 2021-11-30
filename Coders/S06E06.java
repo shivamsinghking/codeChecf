@@ -21,7 +21,74 @@ public class Main
 
     public static void solve()
     {
+        int n = sc.nextInt();
+        int k = sc.nextInt();
 
+        String s = String.valueOf(n);
+        int[] arr = new int[10];
+        for(int i = 0; i < s.length(); i++){
+            int a = s.charAt(i) - '0';
+            arr[a]++;
+        }
+
+        long pro = 1L;
+        for(int i = 0; i < arr.length; i++){
+            if(arr[i] > 0){
+              pro = pro*((long)Math.pow(i, arr[i]));
+            }
+        }
+
+        // out.println(Arrays.toString(arr) + " " + pro);
+
+        if(pro == 0){
+          while(arr[0] > 0 && k > 0){
+            arr[0]--;
+            arr[1]++;
+            k--;
+          }
+        }
+
+        pro = 1L;
+        for(int i = 0; i < arr.length; i++){
+          if(arr[i] > 0){
+            pro = pro*((long)Math.pow(i, arr[i]));
+          }
+       }
+
+        if(pro == 0){
+          out.println(0);
+          return;
+        }
+
+        // out.println(pro);
+        while(k > 0){
+          int index = -1;
+          long max = pro;
+           for(int i = 1; i < arr.length; i++){
+             if(i == 9) continue;
+            
+             if(arr[i] > 0){
+              long copyPro = pro;
+              
+              copyPro = copyPro/i;
+              copyPro = copyPro*(i+1);
+              // out.println(copyPro);
+              if(copyPro > max){
+                max = copyPro;
+                index = i;
+              }
+             }
+           }
+
+           if(index != -1){
+            pro = max;
+            arr[index]--;
+            arr[index+1]++;
+           }
+           k--;
+        }
+        // out.println(Arrays.toString(arr));
+        out.println(pro);
     }
 
     static ArrayList<Long> prime_factors(long n) {

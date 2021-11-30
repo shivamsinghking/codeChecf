@@ -22,26 +22,57 @@ public class Main
     public static void solve()
     {
 
+      int n = sc.nextInt();
+      int[] arr = new int[2*n];
+      for(int i = 0; i < 2*n; i++){
+        arr[i] = sc.nextInt();
+      }
+
+      Arrays.sort(arr);
+      int[] ans = new int[n];
+
+      int index = 0;
+      int p=0;
+      HashSet<Integer> s = new HashSet<>();
+      for(int i=0;i<2*n;i++)
+      {
+        if(!s.contains(arr[i]))
+        {
+         ans[p]=arr[i];
+         p++;
+         s.add(arr[i]);
+        }
+      }
+
+      // out.println(Arrays.toString(ans));
+
+      // int[] check = new int[2*n];
+      Arrays.sort(ans);
+      List<Integer> ll = new ArrayList<>();
+      for(int i = 0; i < n; i++){
+       ll.add(ans[i/2]);
+       ll.add(ans[i+(n-1 - i)/2]);
+      }
+      // out.println(ll);
+      Collections.sort(ll);
+      Arrays.sort(arr);
+      // checking...
+      // out.print(ll);
+      for(int i = 0; i < 2*n; i++){
+         if(arr[i] != ll.get(i)){
+            out.println(-1);
+            return;
+         }
+      }
+
+      Arrays.sort(ans);
+      for(int i: ans){
+        out.print(i + " ");
+      }
+
+      out.println();
     }
 
-    static ArrayList<Long> prime_factors(long n) {
-        ArrayList<Long> ans = new ArrayList<Long>();
-        while (n % 2 == 0) {
-            ans.add(2L);
-            return ans;
-        }
-        for (long i = 3; i <= Math.sqrt(n); i++) {
-            while (n % i == 0) {
-                ans.add(i);
-                return ans;
-            }
-        }
-        if (n > 2){
-            ans.add(n);
-        }
-        return ans;
-    }
-    
     public static long leftShift(long a){
         return (long)Math.pow(2, a);
     }

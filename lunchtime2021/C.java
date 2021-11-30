@@ -22,26 +22,15 @@ public class Main
     public static void solve()
     {
 
+      HashSet<Integer> set = new HashSet<>();
+      set.add(2);
+      set.add(2);
+      set.add(1);
+      for(int i: set){
+        out.println(i);
+      }
     }
 
-    static ArrayList<Long> prime_factors(long n) {
-        ArrayList<Long> ans = new ArrayList<Long>();
-        while (n % 2 == 0) {
-            ans.add(2L);
-            return ans;
-        }
-        for (long i = 3; i <= Math.sqrt(n); i++) {
-            while (n % i == 0) {
-                ans.add(i);
-                return ans;
-            }
-        }
-        if (n > 2){
-            ans.add(n);
-        }
-        return ans;
-    }
-    
     public static long leftShift(long a){
         return (long)Math.pow(2, a);
     }
