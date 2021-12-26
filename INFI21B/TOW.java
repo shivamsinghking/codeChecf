@@ -22,83 +22,67 @@ public class Main
     public static void solve()
     {
         int n = sc.nextInt();
-        int k = sc.nextInt();
-        String s = sc.nextLine();
+        int m = sc.nextInt();
+        int[] arr = new int[n];
+        PriorityQueue<int[]> p1 = new PriorityQueue<>((a, b) -> b[0] - a[0]);
+        PriorityQueue<int[]> p2 = new PriorityQueue<>((a, b) -> b[0] - a[0]); 
 
-        int ii = 0;
-        int jj = n - 1;
-        while(ii <= jj && s.charAt(ii) == s.charAt(jj)){
-          ii++;
-          jj--;
-        }
-        boolean same = false;
-        
-        if(jj < ii){
-          same = true;
+        for(int i = 0; i < n; i++){
+            arr[i] = sc.nextInt();
+            p1.add(new int[]{arr[i], i});
         }
 
-        if(k == 0){
-          if(same){
-            out.println(n);
-          }else{
-            out.println(-1);
-          }
-          return;
+        int[] arr2 = new int[m];
+        for(int i = 0; i < m; i++){
+            arr2[i] = sc.nextInt();
+            p2.add(new int[]{arr2[i], i});
         }
+  
+        boolean flag = true;
+        int[] v = p2.poll();
 
-        if(same){
-          out.println(n);
-          return;
-        }
-
-        long max = Integer.MIN_VALUE;
-        for(int i = 0; i < 26; i++){
-          char c = Character.toUpperCase(getAlpha(i));
-          
-          int j = 0;
-          long sum = 0L;
-
-          int prefixIndex = 0;
-          while(prefixIndex < n && s.charAt(prefixIndex) == c){
-            prefixIndex++;
-          }
-          sum += prefixIndex;
-
-          int suffixIndex = n - 1;
-          while(suffixIndex >= 0 && s.charAt(suffixIndex) == c){
-            suffixIndex--;
-          }
-
-          sum += (n - 1 - suffixIndex);
-
-          List<Integer> ll = new ArrayList<>();
-          for(j = prefixIndex; j <= suffixIndex; j++ ){
-            if(s.charAt(j) == c){
-              int prevIndex = j;
-              while(j <= suffixIndex && s.charAt(j) == c){
-                j++;
-              }
-              ll.add(j - prevIndex);
+        List<Integer> ll = new ArrayList<>();
+        for(int i : arr){
+            // out.println(" an " + Arrays.toString(v) + " " + i + " " + ll);
+            if(i > v[0]){
+                flag = false;
+                break;
+            }else if(v[0] == i){
+                ll.add(v[0]);
+                if(p2.isEmpty()){
+                    flag = false;
+                    break;
+                }else{
+                    v = p2.poll();
+                }
             }
-          }
-
-          Collections.sort(ll);
-          int kk = k-1;
-          int index = ll.size() - 1;
-          while(kk > 0 && index >= 0){
-            sum += ll.get(index);
-            index--;
-            kk--;
-          }
-          
-          max = Math.max(sum, max);
         }
-        out.println(max);
+
+        if(!flag){
+            out.println("NO");
+            return;
+        }
+
+        ll.add(v[0]);
+        // out.println(" == " + p2.size());
+        List<Integer> ans = new ArrayList<>();
+        while(!p2.isEmpty()){
+            ans.add(p2.poll()[0]);
+        }
+        ans.sort((a, b) -> a - b);
+        for(int i: ll){
+            ans.add(i);
+        }
+        out.println("YES");
+        for(int i: ans){
+            out.print(i + " ");
+        }
+        out.println();
+
+
+       
     }
 
-    static Character getAlpha(int i){
-      return (char)(i+97);
-    }
     static ArrayList<Long> prime_factors(long n) {
         ArrayList<Long> ans = new ArrayList<Long>();
         while (n % 2 == 0) {

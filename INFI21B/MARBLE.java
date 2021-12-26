@@ -19,86 +19,62 @@ public class Main
       out.close();
     }
 
+    public static boolean isVowel(char c){
+      if(c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u'){
+        return true;
+      }
+      return false;
+    }
     public static void solve()
     {
-        int n = sc.nextInt();
-        int k = sc.nextInt();
-        String s = sc.nextLine();
+      int n = sc.nextInt();
+      String s1 = sc.nextLine();
+      String s2 = sc.nextLine();
 
-        int ii = 0;
-        int jj = n - 1;
-        while(ii <= jj && s.charAt(ii) == s.charAt(jj)){
-          ii++;
-          jj--;
-        }
-        boolean same = false;
-        
-        if(jj < ii){
-          same = true;
-        }
+      long min = Long.MAX_VALUE;
+      for(int i = 0; i < 26; i++){
+       
+        char[] ss1 = s1.toCharArray();
+        char[] ss2 = s2.toCharArray();
 
-        if(k == 0){
-          if(same){
-            out.println(n);
-          }else{
-            out.println(-1);
-          }
-          return;
-        }
-
-        if(same){
-          out.println(n);
-          return;
-        }
-
-        long max = Integer.MIN_VALUE;
-        for(int i = 0; i < 26; i++){
-          char c = Character.toUpperCase(getAlpha(i));
-          
-          int j = 0;
-          long sum = 0L;
-
-          int prefixIndex = 0;
-          while(prefixIndex < n && s.charAt(prefixIndex) == c){
-            prefixIndex++;
-          }
-          sum += prefixIndex;
-
-          int suffixIndex = n - 1;
-          while(suffixIndex >= 0 && s.charAt(suffixIndex) == c){
-            suffixIndex--;
+        long op = 0;
+        // out.println(ss1 + " " + ss2);
+        for(int j = 0; j < n; j++){
+          if(ss1[j] == '?'){
+            ss1[j] = (char)(i+'a');
           }
 
-          sum += (n - 1 - suffixIndex);
+          if(ss2[j] == '?'){
+            ss2[j] = (char)(i+'a');
+          }
 
-          List<Integer> ll = new ArrayList<>();
-          for(j = prefixIndex; j <= suffixIndex; j++ ){
-            if(s.charAt(j) == c){
-              int prevIndex = j;
-              while(j <= suffixIndex && s.charAt(j) == c){
-                j++;
+          if(ss1[j] != ss2[j]){
+            if(isVowel(ss1[j])){
+              // vowel
+              if(isVowel(ss2[j])){
+                op += 2;
+              }else{
+                op += 1;
               }
-              ll.add(j - prevIndex);
+            }else{
+              // cons
+              if(isVowel(ss2[j])){
+                //vowel
+                op += 1;
+              }else{
+                op += 2;
+              }
             }
           }
-
-          Collections.sort(ll);
-          int kk = k-1;
-          int index = ll.size() - 1;
-          while(kk > 0 && index >= 0){
-            sum += ll.get(index);
-            index--;
-            kk--;
-          }
-          
-          max = Math.max(sum, max);
         }
-        out.println(max);
+        // out.println(" -- " + op);
+        min = Math.min(min, op);
+      }
+
+      out.println(min);
+
     }
 
-    static Character getAlpha(int i){
-      return (char)(i+97);
-    }
     static ArrayList<Long> prime_factors(long n) {
         ArrayList<Long> ans = new ArrayList<Long>();
         while (n % 2 == 0) {
